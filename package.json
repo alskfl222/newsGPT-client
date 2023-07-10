@@ -12,5 +12,10 @@
     "@nuxt/devtools": "latest",
     "@types/node": "^18.16.19",
     "nuxt": "^3.6.2"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.9",
+    "sass": "^1.63.6",
+    "sass-loader": "^13.3.2"
   }
 }
