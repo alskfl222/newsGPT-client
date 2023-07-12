@@ -7,11 +7,11 @@ const newsObj = data._value;
 </script>
 
 <template>
-  <div class="main-container">
+  <div class="p-4 b-1 b-black">
     <h1>Index page</h1>
     <div v-if="pending">데이터 로딩 중...</div>
     <div v-if="error">데이터를 불러오는데 실패했습니다: {{ error }}</div>
-    <div v-if="data && !pending" class="news-wrapper">
+    <div v-if="data && !pending" class="grid grid-cols-2 gap-4">
       <MainNewsList
         v-for="(newsList, keyword) in newsObj"
         :key="keyword"
@@ -22,20 +22,3 @@ const newsObj = data._value;
     </div>
   </div>
 </template>
-
-<style lang="scss">
-  .main-container {
-    padding: 1rem;
-    border: 1px solid black;
-  }
-
-  .news-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
-    gap: 2rem;
-
-    @media screen and (min-width: 769px) {
-      grid-template-columns: repeat(auto-fill, minmax(33.33%, 1fr));      
-    }
-  }
-</style>

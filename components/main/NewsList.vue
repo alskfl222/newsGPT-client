@@ -15,21 +15,19 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="news-list-wrapper">
+  <div class="p-2 b-1 b-red rd-lg">
     <h2>{{ keyword }}</h2>
-    <div v-for="news in props.newsList" :key="news.url">
-      <h3>{{ news.title }}</h3>
-      <p>{{ news.provider }} - {{ prettyTimeString(news.time) }}</p>
-      <p></p>
-      <a :href="news.url" target="_blank">기사 보기</a>
+    <div class="b-1">
+      <div
+        v-for="news in props.newsList"
+        :key="news.url"
+        class="p-2 bg-teal-300"
+      >
+        <h3>{{ news.title }}</h3>
+        <p>{{ news.provider }} - {{ prettyTimeString(news.time) }} 분석</p>
+        <p>{{ news.vote }}</p>
+        <a :href="news.url" target="_blank">기사 보기</a>
+      </div>
     </div>
   </div>
 </template>
-
-<style lang="scss">
-.news-list-wrapper {
-  padding: 1rem;
-  border: 1px solid black;
-  border-radius: 2rem;
-}
-</style>
