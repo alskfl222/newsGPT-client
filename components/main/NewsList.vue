@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import dayjs from 'dayjs';
-
-interface NewsItem {
-  title: string;
-  provider: string;
-  time: Date;
-  url: string;
-}
+import { NewsItem } from '~/types/news';
+import { prettyTimeString } from '~/utils/time';
 
 const props = defineProps({
   keyword: {
@@ -18,12 +12,6 @@ const props = defineProps({
     default: () => [],
   },
 });
-
-console.log(props)
-
-const prettyTimeString = (time: Date) => {
-  return dayjs(time).format('YYYY년 MM월 DD일');
-};
 </script>
 
 <template>
@@ -39,9 +27,9 @@ const prettyTimeString = (time: Date) => {
 </template>
 
 <style lang="scss">
-  .news-list-wrapper {
-    padding: 1rem;
-    border: 1px solid black;
-    border-radius: 2rem;
-  }
+.news-list-wrapper {
+  padding: 1rem;
+  border: 1px solid black;
+  border-radius: 2rem;
+}
 </style>

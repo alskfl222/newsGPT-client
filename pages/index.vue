@@ -1,6 +1,4 @@
 <script setup>
-// import NewsList from '~/components/NewsList.vue';
-
 const { data, pending, error, refresh } = await useAsyncData('latest', () =>
   $fetch('http://192.168.100.165:8008/latest')
 );
