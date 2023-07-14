@@ -1,4 +1,6 @@
 export interface NewsItem {
+  _id: string,
+  model: string,
   keyword: string,
   title: string,
   url: string,
@@ -8,7 +10,8 @@ export interface NewsItem {
     true: number,
     false: number,
   },
-  topic: string,
+  subject: string,
+  abstract: string,
   upload_time: string,
   sentiment: {
     overall: string,

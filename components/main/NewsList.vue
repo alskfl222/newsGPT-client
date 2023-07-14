@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { NewsItem } from '~/types/news';
 import { prettyTimeString, determineSentiment } from '~/utils';
+const config = useRuntimeConfig();
 
 const props = defineProps({
   keyword: {
@@ -11,7 +12,51 @@ const props = defineProps({
     type: Array as () => NewsItem[],
     default: () => [],
   },
+  refresh: {
+    type: Function,
+    required: true,
+  },
 });
+
+function voteTrue(newsId: string) {
+  const voteHistory = localStorage.getItem('voteHistory')
+    ? JSON.parse(localStorage.getItem('voteHistory')!)
+    : [];
+  if (voteHistory.includes(newsId)) {
+    alert('이미 투표하셨습니다');
+  } else {
+    $fetch(`${config.public.SERVER_URL}/news/${newsId}`, {
+      method: 'PUT',
+      body: { vote: 1 },
+    }).then(() => {
+      localStorage.setItem(
+        'voteHistory',
+        JSON.stringify([...voteHistory, newsId])
+      );
+      props.refresh();
+    });
+  }
+}
+
+function voteFalse(newsId: string) {
+  const voteHistory = localStorage.getItem('voteHistory')
+    ? JSON.parse(localStorage.getItem('voteHistory')!)
+    : [];
+  if (voteHistory.includes(newsId)) {
+    alert('이미 투표하셨습니다');
+  } else {
+    $fetch(`${config.public.SERVER_URL}/news/${newsId}`, {
+      method: 'PUT',
+      body: { vote: -1 },
+    }).then(() => {
+      localStorage.setItem(
+        'voteHistory',
+        JSON.stringify([...voteHistory, newsId])
+      );
+      props.refresh();
+    });
+  }
+}
 </script>
 
 <template>
@@ -40,17 +85,19 @@ const props = defineProps({
             >인 내용의 기사입니다
           </p>
           <p>
+            <span class="font-bold"> {{ keyword }} </span>를
             <span class="font-bold">
-              {{ keyword }}
-            </span>를
-            <span class="font-bold">
-              {{ determineSentiment(news.sentiment.keyword) }}
-            </span>으로 표현합니다
+              {{ determineSentiment(news.sentiment.keyword) }} </span
+            >으로 표현합니다
           </p>
         </div>
         <div class="self-center w-[50%] flex justify-between">
-          <button>적절한 : {{ news.vote.true }}</button
-          ><button>부적절한 : {{ news.vote.false }}</button>
+          <button @click="() => voteTrue(news._id)">
+            적절한 : {{ news.vote.true }}
+          </button>
+          <button @click="() => voteFalse(news._id)">
+            부적절한 : {{ news.vote.false }}
+          </button>
         </div>
       </div>
     </div>
