@@ -25,7 +25,7 @@ if (data.value) {
     <div>{{ newsObj.time }}</div>
     <div>{{ newsObj.related }}</div>
     <div>{{ newsObj.vote }}</div>
-    <div>{{ newsObj.topic }}</div>
+    <div>{{ newsObj.subject }}</div>
     <div>{{ newsObj.sentiment }}</div>
   </div>
   <div v-else>잘못된 ID입니다.</div>

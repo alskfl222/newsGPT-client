@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Chart from './Chart.vue';
 import { NewsItem } from '~/types/news';
 import { prettyTimeString, determineSentiment } from '~/utils';
 const config = useRuntimeConfig();
@@ -60,14 +61,19 @@ function voteFalse(newsId: string) {
 </script>
 
 <template>
-  <div class="p-4 flex flex-col gap-2 b-1 b-red rd-lg">
-    <h2 class="text-xl font-bold">{{ keyword }}</h2>
-    <div class="flex flex-col gap-2">
-      <div
-        v-for="news in props.newsList"
-        :key="news.url"
-        class="p-2 flex flex-col rd-lg bg-teal-100"
-      >
+  <div
+    v-for="news in props.newsList"
+    :key="news.url"
+    class="w-full h-[240px] p-4 flex flex-col gap-2 rd-xl shadow-lg"
+  >
+    <div class="w-full flex justify-between items-center">
+      <div class="h-12 px-2 flex items-center b-1 b-red">
+        {{ news.provider }}
+      </div>
+      <span>{{ prettyTimeString(news.time) }} 분석</span>
+    </div>
+    <div class="flex justify-between gap-4">
+      <div class="flex-none w-[70%] flex flex-col gap-2">
         <a
           :href="news.url"
           target="_blank"
@@ -77,27 +83,41 @@ function voteFalse(newsId: string) {
             {{ news.title }}
           </span>
         </a>
-        <p>{{ news.provider }} - {{ prettyTimeString(news.time) }} 분석</p>
         <div>
           <p>
             <span class="font-bold">
-              {{ determineSentiment(news.sentiment.overall) }} </span
-            >인 내용의 기사입니다
+              {{ determineSentiment(news.sentiment.overall) }}
+            </span>
+            인 내용의 기사입니다
           </p>
           <p>
             <span class="font-bold"> {{ keyword }} </span>를
             <span class="font-bold">
-              {{ determineSentiment(news.sentiment.keyword) }} </span
-            >으로 표현합니다
+              {{ determineSentiment(news.sentiment.keyword) }}
+            </span>
+            으로 표현합니다
           </p>
         </div>
-        <div class="self-center w-[50%] flex justify-between">
-          <button @click="() => voteTrue(news._id)">
-            적절한 : {{ news.vote.true }}
-          </button>
-          <button @click="() => voteFalse(news._id)">
-            부적절한 : {{ news.vote.false }}
-          </button>
+      </div>
+      <div class="w-[30%] flex flex-col justify-evenly items-center gap-2">
+        <Chart
+          v-if="news.vote.true !== 0 || news.vote.false !== 0"
+          :data="{
+            labels: ['적절', '부적절'],
+            datasets: [
+              {
+                data: [news.vote.true, news.vote.false],
+                backgroundColor: ['rgb(50, 50, 250)', 'rgb(250, 50, 50)'],
+                hoverOffset: 2,
+                borderWidth: 0,
+              },
+            ],
+          }"
+        />
+        <div v-else>평가가 없습니다</div>
+        <div class="flex gap-2">
+          <button @click="() => voteTrue(news._id)">적절한</button>
+          <button @click="() => voteFalse(news._id)">부적절한</button>
         </div>
       </div>
     </div>

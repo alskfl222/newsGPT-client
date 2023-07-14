@@ -13,8 +13,8 @@ const { data, pending, error, refresh } = await useAsyncData('latest', () =>
     <div v-if="error">데이터를 불러오는데 실패했습니다: {{ error }}</div>
     <div v-if="data && !pending">
       <MainSearch />
-      <div class="grid grid-cols-2 gap-4">
-        <MainNewsList
+      <div class="flex flex-col gap-4">
+        <NewsList
           v-for="(newsList, keyword) in data"
           :key="keyword"
           :keyword="keyword"
